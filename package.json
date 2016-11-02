@@ -1,0 +1,20 @@
+{
+  "name": "ng2do-mean-app",
+  "version": "0.1.0",
+  "description": "Developing a MEAN app with Angular 2.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chiranjeevi Tapal",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "ejs": "*",
+    "express": "*",
+    "mongojs": "^2.4.0",
+    "morgan": "*",
+    "path": "^0.12.7"
+  }
+}
