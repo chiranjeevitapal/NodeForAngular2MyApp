@@ -27,23 +27,25 @@ router.get('/todo/:id', function(req, res, next) {
 });
 /* register a new employee*/
 router.post('/registerEmployee', function(req, res, next) {
-	var employee = req.body;
-	if (!employee.text || !(employee.isCompleted + '')) {
-		res.status(400);
-		res.json({
-			"error" : "Invalid Data"
-		});
-	} else {
-		db.employees.save(employee, function(err, result) {
-			if (err) {
-				res.send(err);
-			} else {
-				//res.json(result);
-				return res.json(employee);
-			}
-		})
-	}
+	var employee = req.body.employee;
+	
+	db.collection('employees').insert(employee, function(error, record){
+		if (error) {
+			res.send(error);
+		} else {
+			return res.json(employee);
+		}
+	});
 });
+
+router.post('/registerEmployee', function(req, res) {
+    var employee = req.body;
+    var token = req.body.token;
+    var geo = req.body.geo;
+
+    res.send(user_id + ' ' + token + ' ' + geo);
+});
+
 /* PUT/UPDATE a user */
 router.put('/update', function(req, res, next) {
 	var user = req.body.person;
