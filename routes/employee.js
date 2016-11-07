@@ -28,23 +28,16 @@ router.get('/todo/:id', function(req, res, next) {
 /* register a new employee*/
 router.post('/registerEmployee', function(req, res, next) {
 	var employee = req.body.employee;
-	
+	console.log(employee.email1);
 	db.collection('employees').insert(employee, function(error, record){
 		if (error) {
-			res.send(error);
+			return res.json(error);
 		} else {
 			return res.json(employee);
 		}
 	});
 });
 
-router.post('/registerEmployee', function(req, res) {
-    var employee = req.body;
-    var token = req.body.token;
-    var geo = req.body.geo;
-
-    res.send(user_id + ' ' + token + ' ' + geo);
-});
 
 /* PUT/UPDATE a user */
 router.put('/update', function(req, res, next) {
