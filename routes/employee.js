@@ -28,12 +28,11 @@ router.get('/todo/:id', function(req, res, next) {
 /* register a new employee*/
 router.post('/registerEmployee', function(req, res, next) {
 	var employee = req.body.employee;
-	console.log(employee.email1);
 	db.collection('employees').insert(employee, function(error, record){
 		if (error) {
-			return res.json(error);
+			res.json(error);
 		} else {
-			return res.json(employee);
+			res.json(record);
 		}
 	});
 });
