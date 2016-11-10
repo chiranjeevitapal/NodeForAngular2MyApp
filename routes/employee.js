@@ -3,13 +3,13 @@ var router = express.Router();
 var mongojs = require('mongojs');
 var db = mongojs('mongodb://localhost:27017/jobu', [ 'employees' ]);
 /* Get all users */
-router.get('/users', function(req, res, next) {
-	var collection = db.collection('users');
-	collection.find({}).toArray(function(err, users) {
+router.get('/employees', function(req, res, next) {
+	var collection = db.collection('employees');
+	collection.find({}).toArray(function(err, employees) {
 		if (err) {
 			res.send(err);
 		} else {
-			res.json(users);
+			res.json(employees);
 		}
 	});
 });
