@@ -9,7 +9,7 @@ var app = express();
 app.use(cors());
 
 var path = require('path');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var employee = require('./routes/employee');
 
@@ -27,6 +27,12 @@ var options = {
 	key : fs.readFileSync(__dirname + '/certs/server/key.pem'),
 	cert : fs.readFileSync(__dirname + '/certs/server/cert.pem')
 };
+
+morgan('combined', {
+	skip : function(req, res) {
+		return res.statusCode < 400
+	}
+})
 
 // Create an HTTP service.
 http.createServer(app).listen(80);

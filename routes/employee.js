@@ -14,14 +14,17 @@ router.get('/employees', function(req, res, next) {
 	});
 });
 /* GET One Todo with the provided ID */
-router.get('/todo/:id', function(req, res, next) {
-	db.todos.findOne({
-		_id : mongojs.ObjectId(req.params.id)
-	}, function(err, todos) {
+router.get('/employeeDetail/:email', function(req, res, next) {
+	console.log('email :::: '+req.params.email);
+	var email = req.params.email;
+	db.employees.findOne({
+		//_id : mongojs.ObjectId(req.params.email)
+		_id : email
+	}, function(err, employee) {
 		if (err) {
 			res.send(err);
 		} else {
-			res.json(todos);
+			res.json(employee);
 		}
 	});
 });
