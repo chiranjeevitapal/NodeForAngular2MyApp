@@ -14,12 +14,11 @@ router.get('/employees', function(req, res, next) {
 	});
 });
 /* GET One Todo with the provided ID */
-router.get('/employeeDetail/:email', function(req, res, next) {
-	console.log('email :::: '+req.params.email);
-	var email = req.params.email;
+router.get('/employeeDetail/:userName', function(req, res, next) {
+	var userName = req.params.userName;
 	db.employees.findOne({
 		//_id : mongojs.ObjectId(req.params.email)
-		_id : email
+		_id : userName
 	}, function(err, employee) {
 		if (err) {
 			res.send(err);
