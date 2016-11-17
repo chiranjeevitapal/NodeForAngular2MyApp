@@ -17,7 +17,7 @@ router.get('/employees', function(req, res, next) {
 router.get('/employeeDetail/:userName', function(req, res, next) {
 	var userName = req.params.userName;
 	db.employees.findOne({
-		//_id : mongojs.ObjectId(req.params.email)
+		// _id : mongojs.ObjectId(req.params.email)
 		_id : userName
 	}, function(err, employee) {
 		if (err) {
@@ -27,7 +27,7 @@ router.get('/employeeDetail/:userName', function(req, res, next) {
 		}
 	});
 });
-/* register a new employee*/
+/* register a new employee */
 router.post('/registerEmployee', function(req, res, next) {
 	var employee = req.body.employee;
 	db.collection('employees').insert(employee, function(error, record){
@@ -37,6 +37,32 @@ router.post('/registerEmployee', function(req, res, next) {
 			res.json(record);
 		}
 	});
+});
+
+/* login with employee creds */
+router.post('/loginEmployee', function(req, res, next) {
+	var uName = req.body.employee.userName;
+	var password = req.body.employee.password;
+    console.log('authenticating %s:%s', uName, password);
+    db.employees.findOne({
+    	userName: uName
+    },
+    function (err, record) {
+        if (record) {
+            if (err) res.status(500).send({ error: 'Authentication Failed'});
+            /*hash(pass, user.salt, function (err, hash) {
+                if (err) return fn(err);
+                if (hash == user.hash) return fn(null, user);
+                fn(new Error('invalid password'));
+            });*/
+            if(password == record.password) res.json(record);
+            if(password != record.password){
+            	res.status(500).send({ error: 'Username and Password mismatch'});
+            }
+        } else {
+        	res.status(500).send({ error: 'Bad Credentials'});
+        }
+    });
 });
 
 
