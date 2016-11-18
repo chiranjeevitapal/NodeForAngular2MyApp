@@ -50,11 +50,11 @@ router.post('/loginEmployee', function(req, res, next) {
     function (err, record) {
         if (record) {
             if (err) res.status(500).send({ error: 'Authentication Failed'});
-            /*hash(pass, user.salt, function (err, hash) {
-                if (err) return fn(err);
-                if (hash == user.hash) return fn(null, user);
-                fn(new Error('invalid password'));
-            });*/
+            /*
+			 * hash(pass, user.salt, function (err, hash) { if (err) return
+			 * fn(err); if (hash == user.hash) return fn(null, user); fn(new
+			 * Error('invalid password')); });
+			 */
             if(password == record.password) res.json(record);
             if(password != record.password){
             	res.status(500).send({ error: 'Username and Password mismatch'});
@@ -67,15 +67,14 @@ router.post('/loginEmployee', function(req, res, next) {
 
 
 /* PUT/UPDATE a user */
-router.put('/update', function(req, res, next) {
-	var user = req.body.person;
-
+router.put('/updateEmployee', function(req, res, next) {
+	var employee = req.body.employee;
 	var updObj = {};
-	if (user.isCompleted) {
-		updObj.isCompleted = user.isCompleted;
+	if (employee.isCompleted) {
+		updObj.isCompleted = employee.isCompleted;
 	}
-	if (user.text) {
-		updObj.text = user.text;
+	if (employee.text) {
+		updObj.text = employee.text;
 	}
 	if (!updObj) {
 		res.status(400);
@@ -83,19 +82,21 @@ router.put('/update', function(req, res, next) {
 			"error" : "Invalid Data"
 		});
 	} else {
-		updObj = user;
+		updObj = employee;
 		delete updObj["_id"];
-		db.users.update({
-			id : Number(user.id)
-		}, updObj, {}, function(err, result) {
+		db.employees.update(
+		{_id : employee.userName}, updObj , {}, function(err, record) {
 			if (err) {
+				console.log("error");
 				res.send(err);
 			} else {
-				return res.json(user);
+				console.log("success");
+				res.json(employee);
 			}
 		});
 	}
 });
+
 
 /* DELETE a Todo */
 
