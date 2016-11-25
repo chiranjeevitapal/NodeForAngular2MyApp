@@ -41,8 +41,8 @@ router.post('/registerEmployee', function(req, res, next) {
 
 /* login with employee creds */
 router.post('/loginEmployee', function(req, res, next) {
-	var uName = req.body.employee.userName;
-	var password = req.body.employee.password;
+	var uName = req.body.userName;
+	var password = req.body.password;
     console.log('authenticating %s:%s', uName, password);
     db.employees.findOne({
     	userName: uName
@@ -50,12 +50,7 @@ router.post('/loginEmployee', function(req, res, next) {
     function (err, record) {
         if (record) {
             if (err) res.status(500).send({ error: 'Authentication Failed'});
-            /*
-			 * hash(pass, user.salt, function (err, hash) { if (err) return
-			 * fn(err); if (hash == user.hash) return fn(null, user); fn(new
-			 * Error('invalid password')); });
-			 */
-            if(password == record.password) res.json(record);
+            if(password == record.password) res.json({'authStatus':'success'});
             if(password != record.password){
             	res.status(500).send({ error: 'Username and Password mismatch'});
             }
