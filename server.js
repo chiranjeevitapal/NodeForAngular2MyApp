@@ -1,40 +1,73 @@
-'use strict';
-var https = require('https');
-var http = require('http');
-var cors = require('./cors');
-var fs = require('fs');
 var express = require('express');
-var app = express();
-
-app.use(cors());
-
 var path = require('path');
-var morgan = require('morgan');
+var cors = require('cors');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var mongodb = require('mongodb');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/jobu');
+var db = mongoose.connection;
+
 var employee = require('./routes/employee');
 
-var bodyParser = require('body-parser');
+// Init App
+var app = express();
+app.use(cors());
 
-app.use(bodyParser.json()); // support json encoded bodies
+// BodyParser Middleware
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended : true
-})); // support encoded bodies
+  extended: true
+}));
+app.use(cookieParser());
+
+// Express Session
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
+}));
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Express Validator
+app
+        .use(expressValidator({
+          errorFormatter: function(param, msg, value) {
+            var namespace = param.split('.'), root = namespace.shift(), formParam = root;
+
+            while (namespace.length) {
+              formParam += '[' + namespace.shift() + ']';
+            }
+            return {
+              param: formParam,
+              msg: msg,
+              value: value
+            };
+          }
+        }));
+
+// Global Vars
+/*
+ * app.use(function (req, res, next) { res.locals.success_msg =
+ * req.flash('success_msg'); res.locals.error_msg = req.flash('error_msg');
+ * res.locals.error = req.flash('error'); res.locals.user = req.user || null;
+ * next(); });
+ */
 
 app.use('/api/', employee);
 
-// This line is from the Node.js HTTPS documentation.
-var options = {
-	key : fs.readFileSync(__dirname + '/certs/server/key.pem'),
-	cert : fs.readFileSync(__dirname + '/certs/server/cert.pem')
-};
+// Set Port
+app.set('port', (process.env.PORT || 5000));
 
-morgan('combined', {
-	skip : function(req, res) {
-		return res.statusCode < 400
-	}
-})
-
-// Create an HTTP service.
-http.createServer(app).listen(80);
-// Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(443);
+app.listen(app.get('port'), function() {
+  console.log('Server started on port ' + app.get('port'));
+});

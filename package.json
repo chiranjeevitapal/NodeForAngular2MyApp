@@ -1,21 +1,28 @@
 {
-  "name": "ng2do-mean-app",
-  "version": "0.1.0",
-  "description": "Developing a MEAN app with Angular 2.0",
+  "name": "portal-nodejs-backend",
+  "version": "1.0.0",
+  "description": "Backend for job portal Angular 2.0 application",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chiranjeevi Tapal",
-  "license": "MIT",
+  "license": "CTAPAL",
   "dependencies": {
+	"bcryptjs": "*",
     "body-parser": "*",
+    "connect-flash": "*",
     "cookie-parser": "*",
-    "ejs": "*",
     "express": "*",
-    "mongojs": "^2.4.0",
-    "morgan": "*",
-    "nodemailer": "^2.6.4",
-    "path": "^0.12.7"
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mongojs": "*",
+    "mongodb": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*",
+    "cors": "*"
   }
 }
