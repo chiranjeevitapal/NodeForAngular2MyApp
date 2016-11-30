@@ -58,7 +58,7 @@ passport.use(new LocalStrategy({
   usernameField: 'userName',
   passwordField: 'password',
   passReqToCallback: true,
-  session: false
+  session: true
 }, function(req, username, password, done) {
   getUserByUsername(username, function(err, user) {
     if (err) throw err;
@@ -79,12 +79,18 @@ passport.use(new LocalStrategy({
   });
 }));
 
+//used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-  done(null, user);
+	console.log("user.userName::::::  "+user.userName)
+    done(null, user.userName); 
+   // where is this user.id going? Are we supposed to access this anywhere?
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+// used to deserialize the user
+passport.deserializeUser(function(userName, done) {
+	db.collection('employees').findById(userName, function(err, user) {
+        done(err, userName);
+    });
 });
 
 getUserByUsername = function(username, callback) {
@@ -118,9 +124,7 @@ router.post('/loginEmployee', function(req, res, next) {
           error: info.message
         });
       } else {
-        res.json({
-          'authStatus': 'success'
-        });
+    	  return res.json(user);
       }
     });
   })(req, res, next);
