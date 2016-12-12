@@ -9,20 +9,23 @@
   "author": "Chiranjeevi Tapal",
   "license": "CTAPAL",
   "dependencies": {
-	"bcryptjs": "*",
+    "bcryptjs": "*",
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "*",
+    "cors": "*",
     "express": "*",
     "express-messages": "*",
     "express-session": "*",
     "express-validator": "*",
-    "mongojs": "*",
+    "fs": "0.0.1-security",
+    "mkdirp": "^0.5.1",
     "mongodb": "*",
+    "mongojs": "*",
     "mongoose": "*",
+    "multer": "^1.2.0",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*",
-    "cors": "*"
+    "passport-local": "*"
   }
 }
