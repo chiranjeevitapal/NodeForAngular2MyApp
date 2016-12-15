@@ -3,11 +3,9 @@ var router = express.Router();
 var mongojs = require('mongojs');
 var bcrypt = require('bcryptjs');
 var fs = require('fs');
-var multer = require('multer');
 var db = mongojs('mongodb://localhost:27017/jobu', [ 'employees' ]);
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var mkdirp = require('mkdirp');
 
 /* Get all users */
 router.get('/employees', function(req, res, next) {
@@ -194,33 +192,5 @@ router.put('/updateEmployee', function(req, res, next) {
 
 /* DELETE a Todo */
 
-/*
- * router.delete('/delete', function(req, res) { var user = req.body.person;
- * db.users.remove({ id : Number(user.id) }, '', function(err, result) { if
- * (err) { res.send(err); } else { return res.json(user); } }); });
- */
-var storage = multer.diskStorage({
-	destination : function(req, file, callback) {
-		var dest = 'C:/Temp/';
-		mkdirp.sync(dest);
-		callback(null, dest);
-	},
-	filename : function(req, file, callback) {
-		callback(null, file.fieldname + '-' + Date.now()+'.docx');
-	}
-});
-
-var upload = multer({
-	storage : storage
-}).single('resume');
-
-router.post('/upload', function(req, res) {
-	upload(req, res, function(err) {
-		if (err) {
-			return res.end("Error uploading file.");
-		}
-		res.end("File is uploaded.");
-	});
-});
 
 module.exports = router;
