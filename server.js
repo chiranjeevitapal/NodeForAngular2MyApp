@@ -16,6 +16,7 @@ var db = mongoose.connection;
 
 var employee = require('./routes/employee');
 var uploader = require('./routes/uploader');
+var walkins = require('./routes/walkins');
 
 // Init App
 var app = express();
@@ -84,6 +85,7 @@ app
 
 app.use('/api/', employee);
 app.use('/api/', uploader);
+app.use('/api/', walkins);
 
 // Set Port
 app.set('port', (process.env.PORT || 5000));
