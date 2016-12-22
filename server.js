@@ -37,6 +37,7 @@ app.use(function(req, res, next) {
 	res.setHeader('Access-Control-Allow-Headers',
 			'X-Requested-With,content-type');
 	res.setHeader('Access-Control-Allow-Credentials', true);
+	res.setHeader('access-control-expose-headers', 'X-Total-Count');
 	next();
 });
 
