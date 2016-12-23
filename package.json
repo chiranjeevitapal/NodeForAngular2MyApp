@@ -11,6 +11,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.0",
     "body-parser": "*",
+    "cheerio": "^0.22.0",
     "connect-flash": "*",
     "cookie-parser": "*",
     "cors": "*",
@@ -27,6 +28,7 @@
     "multer": "^1.2.1",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "request": "^2.79.0"
   }
 }
