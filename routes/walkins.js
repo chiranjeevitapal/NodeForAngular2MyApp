@@ -33,6 +33,7 @@ router.get('/walkinsAll/:offset/:limit/:sortBy/:sortType', function(req, res,
 
 router.post('/postWalkin', function(req, res, next) {
     var walkin = req.body.walkin;
+    console.log(walkin);
     collection.insert(walkin,
         function(error, record) {
             if (error) {
