@@ -88,7 +88,7 @@ app.use('/api/', uploader);
 app.use('/api/', walkins);
 
 // Set Port
-app.set('port', (process.env.PORT || 80));
+app.set('port', (process.env.PORT || 8090));
 
 app.listen(app.get('port'), function() {
 	console.log('Server started on port ' + app.get('port'));
