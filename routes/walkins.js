@@ -31,6 +31,25 @@ router.get('/walkinsAll/:offset/:limit/:sortBy/:sortType', function(req, res,
     });
 });
 
+/* Get all walkins */
+router.get('/walkinsAll', function(req, res,
+    next) {
+
+  collection.find({}).toArray(function(err, walkins) {
+        if (err) {
+            res.send(err);
+        } else {
+            collection.find().count(function(err, count) {
+                if (!err) {
+                    res.setHeader('X-Total-Count', count);
+                    res.json(walkins);
+                }
+            })
+
+        }
+    });
+});
+
 router.post('/postWalkin', function(req, res, next) {
     var walkin = req.body.walkin;
     console.log(walkin);
