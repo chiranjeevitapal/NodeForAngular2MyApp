@@ -8,6 +8,12 @@ var db = mongojs('mongodb://localhost:27017/jobu', ['walkins']);
 var collection = db.collection('walkins');
 var todaywalkinsScraper = require('../utils/todaywalkinsScraper.js');
 
+//get user ip address
+router.get('/getClientAddress', function(req, res) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    res.send(ip);
+});
+
 /* Get all walkins */
 router.get('/walkinsAll/:offset/:limit/:sortBy/:sortType', function(req, res,
     next) {
@@ -68,7 +74,7 @@ router.get('/scrape/:website/:link', function(req, res) {
     var website = req.params.website;
     var link = req.params.link;
     if (website == 'todaywalkins') {
-      todaywalkinsScraper.scrape(res, link);
+        todaywalkinsScraper.scrape(res, link);
     }
 })
 module.exports = router;
