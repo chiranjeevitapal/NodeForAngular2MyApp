@@ -31,7 +31,7 @@ var app = express();
  */
 
 app.use(function(req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin',
+	res.header('Access-Control-Allow-Origin',
 			'*');
 	res.setHeader('Access-Control-Allow-Methods', 'POST');
 	res.setHeader('Access-Control-Allow-Headers',

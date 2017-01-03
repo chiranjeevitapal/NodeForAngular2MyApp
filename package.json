@@ -26,6 +26,7 @@
     "mongojs": "*",
     "mongoose": "^4.7.2",
     "multer": "^1.2.1",
+    "nodemailer": "^2.7.0",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*",
