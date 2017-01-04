@@ -217,4 +217,8 @@ router.get('/scrape/:website/:link', function(req, res) {
         todaywalkinsScraper.scrape(res, link);
     }
 })
+
+router.get('/scrapeTodayUrls', function(req, res) {
+    todaywalkinsScraper.scrapeTodayUrls(res);
+})
 module.exports = router;

@@ -1,6 +1,55 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
+function scrapeTodayUrls(res) {
+    var urlsArray = [];
+    url = 'http://www.todaywalkins.com/';
+    request(url, function(error, response, html) {
+        if (error) {
+            res.send(error);
+        } else {
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = dd + '/' + mm;
+
+            var tableHtml = html.substring(html.indexOf('</thead>') + 8, html.indexOf('</table>'));
+            html = '<div class="myLinks">' + tableHtml + '</div>'
+            var $ = cheerio.load(html);
+            $('.myLinks').filter(function() {
+                $("tr").each(function() {
+                    var tdCount = 0;
+                    var readLink = false;
+                    $('td', this).each(function() {
+                        if (tdCount == 0) {
+                            var datePosted = $(this).html();
+                            if (datePosted == today) {
+                                readLink = true;
+                            }
+                        }
+                        if (tdCount == 6 && readLink) {
+                            var link = $(this).html();
+                            var trimmedLink = link.substring(link.indexOf('href="') + 6, link.indexOf('.aspx'));
+                            urlsArray.push(trimmedLink);
+                        }
+                        tdCount++;
+                    })
+
+                })
+            });
+            res.json(urlsArray);
+        }
+    });
+}
+
 function scrape(res, link) {
     url = 'http://www.todaywalkins.com/' + link + '.aspx';
     request(url, function(error, response, html) {
@@ -10,7 +59,6 @@ function scrape(res, link) {
             var regex = /<br\s*[\/]?>/gi;
             html = html.replace(regex, "\n");
             var $ = cheerio.load(html);
-            var title, release, rating;
             var walkin = {
                 title: "",
                 company: "",
@@ -126,3 +174,4 @@ function scrape(res, link) {
 }
 
 module.exports.scrape = scrape;
+module.exports.scrapeTodayUrls = scrapeTodayUrls;
