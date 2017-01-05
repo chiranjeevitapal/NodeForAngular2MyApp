@@ -9,16 +9,10 @@ var db = mongojs('mongodb://localhost:27017/jobu', ['walkins']);
 var collection = db.collection('walkins');
 var todaywalkinsScraper = require('../utils/todaywalkinsScraper.js');
 var mailSender = require('../utils/mailSender.js');
+var capture = require('../utils/capture.js');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-
-
-//get user ip address
-router.get('/getClientAddress', function(req, res) {
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    res.send(ip);
-});
 
 /* Get all walkins */
 router.get('/walkinsAll/:offset/:limit/:sortBy/:sortType', function(req, res,
@@ -54,6 +48,7 @@ router.get('/walkinsAll', function(req, res,
         } else {
             collection.find().count(function(err, count) {
                 if (!err) {
+                    capture.captureDetails(req);
                     res.setHeader('X-Total-Count', count);
                     res.json(walkins);
                 }
@@ -78,91 +73,91 @@ router.post('/postWalkin', function(req, res, next) {
 
 // Login
 router.get('/loginUser', function(req, res) {
-	res.render('loginUser');
+    res.render('loginUser');
 });
 
 passport.use(new LocalStrategy({
-	usernameField : 'email',
-	passwordField : 'password',
-	passReqToCallback : true,
-	session : true
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+    session: true
 }, function(req, username, password, done) {
-	getUserByUsername(username, function(err, user) {
-		if (err)
-			throw err;
-		if (!user) {
-			return done(null, false, {
-				message : 'Unknown user'
-			});
-		}
+    getUserByUsername(username, function(err, user) {
+        if (err)
+            throw err;
+        if (!user) {
+            return done(null, false, {
+                message: 'Unknown user'
+            });
+        }
 
-		comparePassword(password, user.password, function(err, isMatch) {
-			if (err)
-				throw err;
-			if (isMatch) {
-				return done(null, user);
-			} else {
-				return done(null, false, {
-					message : 'Invalid password'
-				});
-			}
-		});
-	});
+        comparePassword(password, user.password, function(err, isMatch) {
+            if (err)
+                throw err;
+            if (isMatch) {
+                return done(null, user);
+            } else {
+                return done(null, false, {
+                    message: 'Invalid password'
+                });
+            }
+        });
+    });
 }));
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-	done(null, user.email);
-	// where is this user.id going? Are we supposed to access this anywhere?
+    done(null, user.email);
+    // where is this user.id going? Are we supposed to access this anywhere?
 });
 
 // used to deserialize the user
 passport.deserializeUser(function(email, done) {
-	db.collection('credentials').findById(email, function(err, user) {
-		done(err, email);
-	});
+    db.collection('credentials').findById(email, function(err, user) {
+        done(err, email);
+    });
 });
 
 getUserByUsername = function(username, callback) {
-	var query = {
-		email : username
-	};
-	db.collection('credentials').findOne(query, callback);
+    var query = {
+        email: username
+    };
+    db.collection('credentials').findOne(query, callback);
 }
 
 comparePassword = function(candidatePassword, hash, callback) {
-	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-		if (err)
-			throw err;
-		callback(null, isMatch);
-	});
+    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+        if (err)
+            throw err;
+        callback(null, isMatch);
+    });
 }
 
 router.post('/loginUser', function(req, res, next) {
-	passport.authenticate('local', function(err, user, info) {
-		if (err) {
-			return res.json({
-				code : 500,
-				error : info.message
-			});
-		}
-		if (!user) {
-			return res.json({
-				code : 500,
-				error : info.message
-			});
-		}
-		req.logIn(user, function(err) {
-			if (err) {
-				return res.json({
-					code : 500,
-					error : info.message
-				});
-			} else {
-				return res.json(user);
-			}
-		});
-	})(req, res, next);
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            return res.json({
+                code: 500,
+                error: info.message
+            });
+        }
+        if (!user) {
+            return res.json({
+                code: 500,
+                error: info.message
+            });
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return res.json({
+                    code: 500,
+                    error: info.message
+                });
+            } else {
+                return res.json(user);
+            }
+        });
+    })(req, res, next);
 });
 
 
@@ -176,8 +171,8 @@ router.post('/registerUser', function(req, res, next) {
                     if (error) {
                         res.json(error);
                     } else {
-                        url = 'Please <a href="http://localhost:8090/api/confirm/' + user.email + '">click</a> to complete your registration';
-                        mailSender.sendMail(user.email, url);
+                        //url = 'Please <a href="http://localhost:8090/api/confirm/' + user.email + '">click</a> to complete your registration';
+                        //mailSender.sendMail(user.email, url);
                         res.json(record);
                     }
                 });
