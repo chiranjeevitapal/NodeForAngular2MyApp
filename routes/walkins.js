@@ -213,6 +213,7 @@ router.get('/scrape/:website/:link', function(req, res) {
     }
 })
 
+
 router.get('/scrapeTodayUrls', function(req, res) {
     todaywalkinsScraper.scrapeTodayUrls(res);
 })
