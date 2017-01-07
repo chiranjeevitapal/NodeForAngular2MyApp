@@ -30,30 +30,62 @@ var app = express();
  * app.use(cors(corsOptions))
  */
 
- app.use(express.static(path.join(__dirname, 'client')));
+
+
+app.use(express.static(path.join(__dirname, 'client')));
+//URL Rewriting - start
+
+
+app.get('/home', function(request, response, next) {
+    app.use(express.static(path.join(__dirname, 'client')))
+    request.url = '/#/home';
+    next();
+});
+
+app.get('/uploadChethan', function(request, response, next) {
+    app.use(express.static(path.join(__dirname, 'client')))
+    request.url = '/#/uploadChethan';
+    next();
+});
+app.get('/postJob', function(request, response, next) {
+    app.use(express.static(path.join(__dirname, 'client')))
+    request.url = '/#/postJob';
+    next();
+});
+
+app.get('/**', function(request, response, next) {
+    if (request.url.indexOf("/api/") == -1) {
+        app.use(express.static(path.join(__dirname, 'client')))
+        request.url = '/#/home';
+    }
+    next();
+});
+//URL Rewriting - end
+
+
 
 app.use(function(req, res, next) {
-	res.header('Access-Control-Allow-Origin',
-			'*');
-	res.setHeader('Access-Control-Allow-Methods', 'POST');
-	res.setHeader('Access-Control-Allow-Headers',
-			'X-Requested-With,content-type');
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	next();
+    res.header('Access-Control-Allow-Origin',
+        '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers',
+        'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
 });
 
 // BodyParser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended : true
+    extended: true
 }));
 app.use(cookieParser());
 
 // Express Session
 app.use(session({
-	secret : 'secret',
-	saveUninitialized : true,
-	resave : true
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
 }));
 
 // Passport init
@@ -62,20 +94,22 @@ app.use(passport.session());
 
 // Express Validator
 app
-		.use(expressValidator({
-			errorFormatter : function(param, msg, value) {
-				var namespace = param.split('.'), root = namespace.shift(), formParam = root;
+    .use(expressValidator({
+        errorFormatter: function(param, msg, value) {
+            var namespace = param.split('.'),
+                root = namespace.shift(),
+                formParam = root;
 
-				while (namespace.length) {
-					formParam += '[' + namespace.shift() + ']';
-				}
-				return {
-					param : formParam,
-					msg : msg,
-					value : value
-				};
-			}
-		}));
+            while (namespace.length) {
+                formParam += '[' + namespace.shift() + ']';
+            }
+            return {
+                param: formParam,
+                msg: msg,
+                value: value
+            };
+        }
+    }));
 
 // Global Vars
 /*
@@ -90,8 +124,8 @@ app.use('/api/', uploader);
 app.use('/api/', walkins);
 
 // Set Port
-app.set('port', (process.env.PORT || 8090));
+app.set('port', (process.env.PORT || 80));
 
 app.listen(app.get('port'), function() {
-	console.log('Server started on port ' + app.get('port'));
+    console.log('Server started on port ' + app.get('port'));
 });
