@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongojs = require('mongojs');
+var ObjectId = require('mongodb').ObjectID;
 var cheerio = require('cheerio');
 var request = require('request');
 var bcrypt = require('bcryptjs');
@@ -54,6 +55,27 @@ router.get('/walkinsAll', function(req, res,
                 }
             })
 
+        }
+    });
+});
+
+/* GET One Walkin with the provided ID */
+router.get('/walkinWithId/:id', function(req, res, next) {
+    var id = req.params.id;
+    collection.find({
+        _id: ObjectId(id)
+    }, function(err, walkin) {
+        if (err) {
+            res.send(err);
+        } else {
+            if (null != walkin) {
+                res.json(walkin);
+            } else {
+                return res.json({
+                    code: 500,
+                    error: "Walkin details not available."
+                });
+            }
         }
     });
 });

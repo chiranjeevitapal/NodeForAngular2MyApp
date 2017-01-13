@@ -53,6 +53,12 @@ app.get('/postJob', function(request, response, next) {
     next();
 });
 
+app.get('/walkin/:id', function(request, response, next) {
+    app.use(express.static(path.join(__dirname, 'client')))
+    request.url = '/#/walkin/:id';
+    next();
+});
+
 app.get('/**', function(request, response, next) {
     if (request.url.indexOf("/api/") == -1) {
         app.use(express.static(path.join(__dirname, 'client')))
