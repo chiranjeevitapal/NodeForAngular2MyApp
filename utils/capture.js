@@ -16,12 +16,13 @@ function captureDetails(req){
 
     var outputString = (curr_date + "-" + m_names[curr_month] +
         "-" + curr_year + " / " + curr_hours + "h " + curr_minutes + "m " + curr_seconds + "s -- IP " + ip);
-
-    fs.appendFile("logins.log", outputString+"\n", function(err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
+    if(ip != "::ffff:49.206.202.208"){
+        fs.appendFile("logins.log", outputString+"\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+    }
 };
 
 module.exports.captureDetails = captureDetails;
