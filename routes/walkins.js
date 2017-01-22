@@ -239,4 +239,11 @@ router.get('/scrape/:website/:link', function(req, res) {
 router.get('/scrapeTodayUrls', function(req, res) {
     todaywalkinsScraper.scrapeTodayUrls(res);
 })
+
+router.get('/scrapeTodayUrls/:website', function(req, res) {
+    var website = req.params.website;
+    if (website == 'todaywalkins') {
+        todaywalkinsScraper.scrapeTodayUrls(res);
+    }
+})
 module.exports = router;
