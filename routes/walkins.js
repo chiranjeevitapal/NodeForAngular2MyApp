@@ -58,12 +58,15 @@ router.get('/walkinsAll', function(req, res,
         }
     });
 });
+router.get('/todayVisitors', function(req, res, next) {
+    capture.readDetails(res);
+})
 
 /* GET One Walkin with the provided ID */
 router.get('/walkinWithId/:id', function(req, res, next) {
     var id = req.params.id;
     collection.find({
-        _id: ObjectId(""+id)
+        _id: ObjectId("" + id)
     }, function(err, walkin) {
         if (err) {
             res.send(err);
