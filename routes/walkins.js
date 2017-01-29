@@ -8,6 +8,7 @@ var bcrypt = require('bcryptjs');
 var fs = require('fs');
 var db = mongojs('mongodb://localhost:27017/jobu', ['walkins']);
 var collection = db.collection('walkins');
+var fbusersCollection = db.collection('fbusers');
 var todaywalkinsScraper = require('../utils/todaywalkinsScraper.js');
 var mailSender = require('../utils/mailSender.js');
 var capture = require('../utils/capture.js');
@@ -249,4 +250,99 @@ router.get('/scrapeTodayUrls/:website', function(req, res) {
         todaywalkinsScraper.scrapeTodayUrls(res);
     }
 })
+
+/* Get registered fb subscribers */
+router.get('/fbsubscribers', function(req, res,
+    next) {
+    fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+        if (err) {
+            res.send(err);
+        } else {
+            fbsubscribers.forEach(function(subscriber) {
+                console.log(subscriber.fb_email);
+            })
+            res.json(fbsubscribers);
+        }
+    });
+});
+
+
+/* Push notifications to registered fb subscribers */
+router.get('/notifyfbsubscribers', function(req, res,
+    next) {
+
+    var html = '<html> <head></head><body><table style="border: 1px solid black;">' +
+        '<thead>' +
+        '<tr><th style="border: 1px solid black;">Company</th>' +
+        '<th style="border: 1px solid black;">Role</th>' +
+        '<th style="border: 1px solid black;">Experience</th>' +
+        '<th style="border: 1px solid black;">Location</th>' +
+        '<th style="border: 1px solid black;">Details</th>' +
+        '</tr>'+
+        '</thead>' +
+        '<tbody>';
+
+    collection.find({}).toArray(function(err, walkins) {
+        var obj = [];
+        var today = new Date();
+        var todayDateString = today.yyyymmdd();
+        if (err) {
+            res.send(err);
+        } else {
+            walkins.forEach(function(walkin) {
+                if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
+                    //obj.push(walkin);
+                    html = html + '<tr><td style="border: 1px solid black;">' + walkin.company + '</td>' +
+                        '<td style="border: 1px solid black;">' + walkin.title + '</td>' +
+                        '<td style="border: 1px solid black;">' + walkin.experience + '</td>' +
+                        '<td style="border: 1px solid black;">' + walkin.location + '</td>' +
+                        '<td style="border: 1px solid black;"><a href="www.walkinshub.com/walkin/' + walkin._id + '"> Details </a></td></tr>';
+                }
+            })
+            html = html + '</tbody></table></body></html>'
+            console.log(html);
+            fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    fbsubscribers.forEach(function(subscriber) {
+                        mailSender.sendMail(subscriber.fb_email, html);
+                    })
+                }
+            })
+            res.json("success");
+        }
+    });
+});
+
+/* get today walkins data */
+router.get('/todaywalkinsdata', function(req, res,
+    next) {
+    collection.find({}).toArray(function(err, walkins) {
+        var obj = [];
+        var today = new Date();
+        var todayDateString = today.yyyymmdd();
+        if (err) {
+            res.send(err);
+        } else {
+            walkins.forEach(function(walkin) {
+                if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
+                    obj.push(walkin);
+                }
+            })
+            res.json(obj);
+        }
+    });
+});
+
+Date.prototype.yyyymmdd = function() {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [this.getFullYear(),
+        (mm > 9 ? '' : '0') + mm,
+        (dd > 9 ? '' : '0') + dd
+    ].join('-');
+};
+
 module.exports = router;

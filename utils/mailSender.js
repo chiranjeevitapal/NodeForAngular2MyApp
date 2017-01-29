@@ -1,13 +1,13 @@
 var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport('smtps://walkinshub1%40gmail.com:Chinna@*27@smtp.gmail.com');
+var transporter = nodemailer.createTransport('smtps://walkinshubindia%40gmail.com:Chinna@*27@smtp.gmail.com');
 
-function sendMail(toEmail, url) {
+function sendMail(toEmail, html) {
   var mailOptions = {
-    from: '"Walkinshub" <walkinshub1@gmail.com>', // sender address
+    from: '"www.walkinshub.com" <walkinshubindia@gmail.com>', // sender address
     to: toEmail, // list of receivers
-    subject: 'Please verify your account', // Subject line
-    text: 'Please complete your registration.', // plaintext body
-    html: url // html body
+    subject: 'Walkins list for today', // Subject line
+    text: 'Hello, Please find below list of job walkins that are posted today', // plaintext body
+    html: html // html body
 };
 
   transporter.sendMail(mailOptions, function(error, info){
