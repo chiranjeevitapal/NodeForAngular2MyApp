@@ -73,6 +73,7 @@ router.get('/walkinWithId/:id', function(req, res, next) {
             res.send(err);
         } else {
             if (null != walkin) {
+                capture.captureDetails(req);
                 res.json(walkin);
             } else {
                 return res.json({
