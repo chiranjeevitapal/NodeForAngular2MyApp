@@ -59,6 +59,42 @@ router.get('/walkinsAll', function(req, res,
         }
     });
 });
+
+/* Get all jobseekers */
+router.get('/jobseekers', function(req, res,
+    next) {
+
+    fbusersCollection.find({}).toArray(function(err, jobseekers) {
+        if (err) {
+            res.send(err);
+        } else {
+          res.json(jobseekers);
+        }
+    });
+});
+
+/* Get all jobseekers */
+router.get('/jobseeker/:id', function(req, res,
+    next) {
+      var id = req.params.id;
+      fbusersCollection.find({
+          fb_id: "" + id
+      }, function(err, jobseeker) {
+          if (err) {
+              res.send(err);
+          } else {
+              if (null != jobseeker) {
+                  res.json(jobseeker);
+              } else {
+                  return res.json({
+                      code: 500,
+                      error: "Information not available."
+                  });
+              }
+          }
+      });
+});
+
 router.get('/todayVisitors', function(req, res, next) {
     capture.readDetails(res);
 })
@@ -95,6 +131,31 @@ router.post('/postWalkin', function(req, res, next) {
                 res.json(record);
             }
         });
+});
+
+router.post('/postbyrecuiter', function(req, res, next) {
+    var walkin = req.body.walkin;
+    var html = '';
+    html = html + '<p>Company: '+walkin.company+'</p>'+
+    '<p>companyProfile: '+walkin.companyProfile+'</p>'+
+    '<p>website: '+walkin.website+'</p>'+
+    '<p>title: '+walkin.title+'</p>'+
+    '<p>position: '+walkin.position+'</p>'+
+    '<p>location: '+walkin.location+'</p>'+
+    '<p>eligibility: '+walkin.eligibility+'</p>'+
+    '<p>experience: '+walkin.experience+'</p>'+
+    '<p>jobDescription: '+walkin.jobDescription+'</p>'+
+    '<p>walkinDate: '+walkin.walkinDate+'</p>'+
+    '<p>walkinTime: '+walkin.walkinTime+'</p>'+
+    '<p>salary: '+walkin.salary+'</p>'+
+    '<p>howToApply: '+walkin.howToApply+'</p>'+
+    '<p>contactDetails: '+walkin.contactDetails+'</p>'+
+    '<p>email: '+walkin.email+'</p>'+
+    '<p>date: '+new Date()+'</p>';
+    mailSender.sendMail(walkin.email,
+    "walkinshubindia@gmail.com", 'Recruiter Post',
+    'Email from recuiter', html);
+      res.json("success");
 });
 
 
@@ -307,7 +368,7 @@ router.get('/notifyfbsubscribers', function(req, res,
                     res.send(err);
                 } else {
                     fbsubscribers.forEach(function(subscriber) {
-                        mailSender.sendMail(subscriber.fb_email, html);
+                        mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
                     })
                 }
             })
