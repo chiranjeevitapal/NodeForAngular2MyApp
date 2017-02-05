@@ -68,7 +68,7 @@ router.get('/jobseekers', function(req, res,
         if (err) {
             res.send(err);
         } else {
-          res.json(jobseekers);
+            res.json(jobseekers);
         }
     });
 });
@@ -76,23 +76,23 @@ router.get('/jobseekers', function(req, res,
 /* Get all jobseekers */
 router.get('/jobseeker/:id', function(req, res,
     next) {
-      var id = req.params.id;
-      fbusersCollection.find({
-          fb_id: "" + id
-      }, function(err, jobseeker) {
-          if (err) {
-              res.send(err);
-          } else {
-              if (null != jobseeker) {
-                  res.json(jobseeker);
-              } else {
-                  return res.json({
-                      code: 500,
-                      error: "Information not available."
-                  });
-              }
-          }
-      });
+    var id = req.params.id;
+    fbusersCollection.find({
+        fb_id: "" + id
+    }, function(err, jobseeker) {
+        if (err) {
+            res.send(err);
+        } else {
+            if (null != jobseeker) {
+                res.json(jobseeker);
+            } else {
+                return res.json({
+                    code: 500,
+                    error: "Information not available."
+                });
+            }
+        }
+    });
 });
 
 router.get('/todayVisitors', function(req, res, next) {
@@ -133,29 +133,61 @@ router.post('/postWalkin', function(req, res, next) {
         });
 });
 
+/* update Profile */
+router.put('/updateprofile', function(req, res, next) {
+
+    var profile = req.body.profile;
+    var updObj = {};
+    if (profile.isCompleted) {
+        updObj.isCompleted = profile.isCompleted;
+    }
+    if (profile.text) {
+        updObj.text = profile.text;
+    }
+    if (!updObj) {
+        res.status(400);
+        res.json({
+            "error": "Invalid Data"
+        });
+    } else {
+        updObj = profile;
+        delete updObj["_id"];
+        fbusersCollection.update({
+            fb_id: profile.fb_id
+        }, updObj, {}, function(err, record) {
+            if (err) {
+                res.send(err);
+            } else {
+
+                res.json(profile);
+            }
+        });
+    }
+});
+
 router.post('/postbyrecuiter', function(req, res, next) {
     var walkin = req.body.walkin;
     var html = '';
-    html = html + '<p>Company: '+walkin.company+'</p>'+
-    '<p>companyProfile: '+walkin.companyProfile+'</p>'+
-    '<p>website: '+walkin.website+'</p>'+
-    '<p>title: '+walkin.title+'</p>'+
-    '<p>position: '+walkin.position+'</p>'+
-    '<p>location: '+walkin.location+'</p>'+
-    '<p>eligibility: '+walkin.eligibility+'</p>'+
-    '<p>experience: '+walkin.experience+'</p>'+
-    '<p>jobDescription: '+walkin.jobDescription+'</p>'+
-    '<p>walkinDate: '+walkin.walkinDate+'</p>'+
-    '<p>walkinTime: '+walkin.walkinTime+'</p>'+
-    '<p>salary: '+walkin.salary+'</p>'+
-    '<p>howToApply: '+walkin.howToApply+'</p>'+
-    '<p>contactDetails: '+walkin.contactDetails+'</p>'+
-    '<p>email: '+walkin.email+'</p>'+
-    '<p>date: '+new Date()+'</p>';
+    html = html + '<p>Company: ' + walkin.company + '</p>' +
+        '<p>companyProfile: ' + walkin.companyProfile + '</p>' +
+        '<p>website: ' + walkin.website + '</p>' +
+        '<p>title: ' + walkin.title + '</p>' +
+        '<p>position: ' + walkin.position + '</p>' +
+        '<p>location: ' + walkin.location + '</p>' +
+        '<p>eligibility: ' + walkin.eligibility + '</p>' +
+        '<p>experience: ' + walkin.experience + '</p>' +
+        '<p>jobDescription: ' + walkin.jobDescription + '</p>' +
+        '<p>walkinDate: ' + walkin.walkinDate + '</p>' +
+        '<p>walkinTime: ' + walkin.walkinTime + '</p>' +
+        '<p>salary: ' + walkin.salary + '</p>' +
+        '<p>howToApply: ' + walkin.howToApply + '</p>' +
+        '<p>contactDetails: ' + walkin.contactDetails + '</p>' +
+        '<p>email: ' + walkin.email + '</p>' +
+        '<p>date: ' + new Date() + '</p>';
     mailSender.sendMail(walkin.email,
-    "walkinshubindia@gmail.com", 'Recruiter Post',
-    'Email from recuiter', html);
-      res.json("success");
+        "walkinshubindia@gmail.com", 'Recruiter Post',
+        'Email from recuiter', html);
+    res.json("success");
 });
 
 
@@ -340,7 +372,7 @@ router.get('/notifyfbsubscribers', function(req, res,
         '<th style="border: 1px solid black;">Experience</th>' +
         '<th style="border: 1px solid black;">Location</th>' +
         '<th style="border: 1px solid black;">Details</th>' +
-        '</tr>'+
+        '</tr>' +
         '</thead>' +
         '<tbody>';
 
@@ -362,7 +394,6 @@ router.get('/notifyfbsubscribers', function(req, res,
                 }
             })
             html = html + '</tbody></table></body></html>'
-            console.log(html);
             fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
                 if (err) {
                     res.send(err);
@@ -377,34 +408,49 @@ router.get('/notifyfbsubscribers', function(req, res,
     });
 });
 
-/* get today walkins data */
-router.get('/todaywalkinsdata', function(req, res,
-    next) {
-    collection.find({}).toArray(function(err, walkins) {
-        var obj = [];
-        var today = new Date();
-        var todayDateString = today.yyyymmdd();
-        if (err) {
-            res.send(err);
-        } else {
-            walkins.forEach(function(walkin) {
-                if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
-                    obj.push(walkin);
+        router.post('/bulkmailer', function(req, res, next) {
+            var message = req.body.message;
+            var html = '';
+            fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    fbsubscribers.forEach(function(subscriber) {
+                      html = html + '<p>'+message+'</p>'
+                        mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
+                    })
                 }
             })
-            res.json(obj);
-        }
-    });
-});
+        });
 
-Date.prototype.yyyymmdd = function() {
-    var mm = this.getMonth() + 1; // getMonth() is zero-based
-    var dd = this.getDate();
+        /* get today walkins data */
+        router.get('/todaywalkinsdata', function(req, res,
+            next) {
+            collection.find({}).toArray(function(err, walkins) {
+                var obj = [];
+                var today = new Date();
+                var todayDateString = today.yyyymmdd();
+                if (err) {
+                    res.send(err);
+                } else {
+                    walkins.forEach(function(walkin) {
+                        if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
+                            obj.push(walkin);
+                        }
+                    })
+                    res.json(obj);
+                }
+            });
+        });
 
-    return [this.getFullYear(),
-        (mm > 9 ? '' : '0') + mm,
-        (dd > 9 ? '' : '0') + dd
-    ].join('-');
-};
+        Date.prototype.yyyymmdd = function() {
+            var mm = this.getMonth() + 1; // getMonth() is zero-based
+            var dd = this.getDate();
 
-module.exports = router;
+            return [this.getFullYear(),
+                (mm > 9 ? '' : '0') + mm,
+                (dd > 9 ? '' : '0') + dd
+            ].join('-');
+        };
+
+        module.exports = router;

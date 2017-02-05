@@ -89,7 +89,7 @@ app.get('/**', function(request, response, next) {
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin',
         '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, PUT');
     res.setHeader('Access-Control-Allow-Headers',
         'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
