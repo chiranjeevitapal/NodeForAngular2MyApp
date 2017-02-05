@@ -413,12 +413,14 @@ router.get('/notifyfbsubscribers', function(req, res,
             var html = '';
             fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
                 if (err) {
-                    res.send(err);
+                    res.send("failed");
                 } else {
                     fbsubscribers.forEach(function(subscriber) {
+                      html = '';
                       html = html + '<p>'+message+'</p>'
                         mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
                     })
+                    res.json("success");
                 }
             })
         });
