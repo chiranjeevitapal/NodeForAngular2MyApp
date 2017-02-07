@@ -399,7 +399,9 @@ router.get('/notifyfbsubscribers', function(req, res,
                     res.send(err);
                 } else {
                     fbsubscribers.forEach(function(subscriber) {
+                      if(subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null){
                         mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
+                      }
                     })
                 }
             })
@@ -418,7 +420,9 @@ router.get('/notifyfbsubscribers', function(req, res,
                     fbsubscribers.forEach(function(subscriber) {
                       html = '';
                       html = html + '<p>'+message+'</p>'
+                      if(subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null){
                         mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
+                      }
                     })
                     res.json("success");
                 }
