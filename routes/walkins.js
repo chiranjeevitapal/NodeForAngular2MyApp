@@ -149,8 +149,7 @@ router.put('/updateprofile', function(req, res, next) {
                     'fb_about': fb_about,
                     'fb_skills': fb_skills,
                 }
-            }
-        },
+            }, 
         function(err, result) {
             if (err) {
                 res.send(err);
