@@ -138,7 +138,7 @@ router.put('/updateprofile', function(req, res, next) {
     var profile = req.body.profile;
     fbusersCollection.update({
                 'fb_id': profile.fb_id
-            }, {
+            },{
                 $set: {
                     'fb_first_name': profile.fb_first_name,
                     'fb_last_name': profile.fb_last_name,
