@@ -145,11 +145,11 @@ router.put('/updateprofile', function(req, res, next) {
                     'fb_email': profile.fb_email,
                     'fb_phone': profile.fb_phone,
                     'fb_qualification': profile.fb_phone,
-                    'fb_experience': fb_experience,
-                    'fb_about': fb_about,
-                    'fb_skills': fb_skills,
+                    'fb_experience': profile.fb_experience,
+                    'fb_about': profile.fb_about,
+                    'fb_skills': profile.fb_skills,
                 }
-            }, 
+            },
         function(err, result) {
             if (err) {
                 res.send(err);
@@ -388,18 +388,23 @@ router.get('/notifyfbsubscribers', function(req, res,
                 }
             })
             html = html + '</tbody></table></body></html>'
-            fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    fbsubscribers.forEach(function(subscriber) {
-                        if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
-                            mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
-                        }
-                    })
-                }
-            })
-            res.json("success");
+            setTimeout(function(){
+              fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+                  if (err) {
+                      res.send(err);
+                  } else {
+                      fbsubscribers.forEach(function(subscriber, i) {
+                        setTimeout(function(){
+                            if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
+                                console.log("sending email to "+subscriber.fb_email);
+                                mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
+                            }
+                        }, (i+1)*5000);
+                      })
+                  }
+              })
+            }, 500);
+            res.json("emails triggered..");
         }
     });
 });
