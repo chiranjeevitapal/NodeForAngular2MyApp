@@ -135,34 +135,29 @@ router.post('/postWalkin', function(req, res, next) {
 
 /* update Profile */
 router.put('/updateprofile', function(req, res, next) {
-
     var profile = req.body.profile;
-    var updObj = {};
-    if (profile.isCompleted) {
-        updObj.isCompleted = profile.isCompleted;
-    }
-    if (profile.text) {
-        updObj.text = profile.text;
-    }
-    if (!updObj) {
-        res.status(400);
-        res.json({
-            "error": "Invalid Data"
-        });
-    } else {
-        updObj = profile;
-        delete updObj["_id"];
-        fbusersCollection.update({
-            fb_id: profile.fb_id
-        }, updObj, {}, function(err, record) {
+    fbusersCollection.update({
+                'fb_id': profile.fb_id
+            }, {
+                $set: {
+                    'fb_first_name': profile.fb_first_name,
+                    'fb_last_name': profile.fb_last_name,
+                    'fb_email': profile.fb_email,
+                    'fb_phone': profile.fb_phone,
+                    'fb_qualification': profile.fb_phone,
+                    'fb_experience': fb_experience,
+                    'fb_about': fb_about,
+                    'fb_skills': fb_skills,
+                }
+            }
+        },
+        function(err, result) {
             if (err) {
                 res.send(err);
             } else {
-
-                res.json(profile);
+                res.json(result);
             }
-        });
-    }
+        })
 });
 
 router.post('/postbyrecuiter', function(req, res, next) {
@@ -399,9 +394,9 @@ router.get('/notifyfbsubscribers', function(req, res,
                     res.send(err);
                 } else {
                     fbsubscribers.forEach(function(subscriber) {
-                      if(subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null){
-                        mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
-                      }
+                        if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
+                            mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
+                        }
                     })
                 }
             })
@@ -410,53 +405,53 @@ router.get('/notifyfbsubscribers', function(req, res,
     });
 });
 
-        router.post('/bulkmailer', function(req, res, next) {
-            var message = req.body.message;
-            var html = '';
-            fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
-                if (err) {
-                    res.send("failed");
-                } else {
-                    fbsubscribers.forEach(function(subscriber) {
-                      html = '';
-                      html = html + '<p>'+message+'</p>'
-                      if(subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null){
-                        mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
-                      }
-                    })
-                    res.json("success");
+router.post('/bulkmailer', function(req, res, next) {
+    var message = req.body.message;
+    var html = '';
+    fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+        if (err) {
+            res.send("failed");
+        } else {
+            fbsubscribers.forEach(function(subscriber) {
+                html = '';
+                html = html + '<p>' + message + '</p>'
+                if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
+                    mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
                 }
             })
-        });
+            res.json("success");
+        }
+    })
+});
 
-        /* get today walkins data */
-        router.get('/todaywalkinsdata', function(req, res,
-            next) {
-            collection.find({}).toArray(function(err, walkins) {
-                var obj = [];
-                var today = new Date();
-                var todayDateString = today.yyyymmdd();
-                if (err) {
-                    res.send(err);
-                } else {
-                    walkins.forEach(function(walkin) {
-                        if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
-                            obj.push(walkin);
-                        }
-                    })
-                    res.json(obj);
+/* get today walkins data */
+router.get('/todaywalkinsdata', function(req, res,
+    next) {
+    collection.find({}).toArray(function(err, walkins) {
+        var obj = [];
+        var today = new Date();
+        var todayDateString = today.yyyymmdd();
+        if (err) {
+            res.send(err);
+        } else {
+            walkins.forEach(function(walkin) {
+                if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
+                    obj.push(walkin);
                 }
-            });
-        });
+            })
+            res.json(obj);
+        }
+    });
+});
 
-        Date.prototype.yyyymmdd = function() {
-            var mm = this.getMonth() + 1; // getMonth() is zero-based
-            var dd = this.getDate();
+Date.prototype.yyyymmdd = function() {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
 
-            return [this.getFullYear(),
-                (mm > 9 ? '' : '0') + mm,
-                (dd > 9 ? '' : '0') + dd
-            ].join('-');
-        };
+    return [this.getFullYear(),
+        (mm > 9 ? '' : '0') + mm,
+        (dd > 9 ? '' : '0') + dd
+    ].join('-');
+};
 
-        module.exports = router;
+module.exports = router;
