@@ -137,19 +137,19 @@ router.post('/postWalkin', function(req, res, next) {
 router.put('/updateprofile', function(req, res, next) {
     var profile = req.body.profile;
     fbusersCollection.update({
-                'fb_id': profile.fb_id
-            },{
-                $set: {
-                    'fb_first_name': profile.fb_first_name,
-                    'fb_last_name': profile.fb_last_name,
-                    'fb_email': profile.fb_email,
-                    'fb_phone': profile.fb_phone,
-                    'fb_qualification': profile.fb_phone,
-                    'fb_experience': profile.fb_experience,
-                    'fb_about': profile.fb_about,
-                    'fb_skills': profile.fb_skills,
-                }
-            },
+            'fb_id': profile.fb_id
+        }, {
+            $set: {
+                'fb_first_name': profile.fb_first_name,
+                'fb_last_name': profile.fb_last_name,
+                'fb_email': profile.fb_email,
+                'fb_phone': profile.fb_phone,
+                'fb_qualification': profile.fb_phone,
+                'fb_experience': profile.fb_experience,
+                'fb_about': profile.fb_about,
+                'fb_skills': profile.fb_skills,
+            }
+        },
         function(err, result) {
             if (err) {
                 res.send(err);
@@ -388,22 +388,20 @@ router.get('/notifyfbsubscribers', function(req, res,
                 }
             })
             html = html + '</tbody></table></body></html>'
-            setTimeout(function(){
-              fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
-                  if (err) {
-                      res.send(err);
-                  } else {
-                      fbsubscribers.forEach(function(subscriber, i) {
-                        setTimeout(function(){
+            fbusersCollection.find({}).toArray(function(err, fbsubscribers) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    fbsubscribers.forEach(function(subscriber, i) {
+                        setTimeout(function() {
                             if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
-                                console.log("sending email to "+subscriber.fb_email);
+                                console.log("sending email to " + subscriber.fb_email);
                                 mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
                             }
-                        }, (i+1)*5000);
-                      })
-                  }
-              })
-            }, 500);
+                        }, (i + 1) * 5000);
+                    })
+                }
+            })
             res.json("emails triggered..");
         }
     });
