@@ -148,6 +148,7 @@ router.put('/updateprofile', function(req, res, next) {
                 'fb_experience': profile.fb_experience,
                 'fb_about': profile.fb_about,
                 'fb_skills': profile.fb_skills,
+                'fb_location': profile.fb_location
             }
         },
         function(err, result) {
@@ -417,9 +418,11 @@ router.post('/bulkmailer', function(req, res, next) {
             fbsubscribers.forEach(function(subscriber) {
                 html = '';
                 html = html + '<p>' + message + '</p>'
-                if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
-                    mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
-                }
+                setTimeout(function() {
+                    if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
+                        mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Message from Walkinshub', '', html);
+                    }
+                }, (i + 1) * 5000);
             })
             res.json("success");
         }
