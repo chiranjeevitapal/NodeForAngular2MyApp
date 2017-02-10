@@ -415,7 +415,7 @@ router.post('/bulkmailer', function(req, res, next) {
         if (err) {
             res.send("failed");
         } else {
-            fbsubscribers.forEach(function(subscriber) {
+            fbsubscribers.forEach(function(subscriber, i) {
                 html = '';
                 html = html + '<p>' + message + '</p>'
                 setTimeout(function() {
