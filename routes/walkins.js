@@ -100,8 +100,8 @@ router.get('/todayVisitors', function(req, res, next) {
 })
 
 /* GET One Walkin with the provided ID */
-router.get('/walkinWithId/:id', function(req, res, next) {
-    var id = req.params.id;
+router.get('/walkin/:id', function(req, res, next) {
+    var id = req.params.id.substring(req.params.id.lastIndexOf('-')+1);
     collection.find({
         _id: ObjectId("" + id)
     }, function(err, walkin) {
