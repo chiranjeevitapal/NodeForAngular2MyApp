@@ -52,6 +52,7 @@ router.get('/walkinsAll', function(req, res,
                 if (!err) {
                     capture.captureDetails(req);
                     res.setHeader('X-Total-Count', count);
+                    res.setHeader('Cache-Control', 'public, max-age=31557600');
                     res.json(walkins);
                 }
             })
@@ -102,6 +103,7 @@ router.get('/todayVisitors', function(req, res, next) {
 /* GET One Walkin with the provided ID */
 router.get('/walkin/:id', function(req, res, next) {
     var id = req.params.id.substring(req.params.id.lastIndexOf('-')+1);
+    //var id = req.params.id;
     collection.find({
         _id: ObjectId("" + id)
     }, function(err, walkin) {
