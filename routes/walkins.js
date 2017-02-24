@@ -423,11 +423,12 @@ router.get('/notifyfbsubscribers', function(req, res,
             walkins.forEach(function(walkin) {
                 if (todayDateString == walkin.date.substring(0, walkin.date.indexOf('T'))) {
                     //obj.push(walkin);
+                    var companyName = walkin.company.replace(/[^a-zA-Z0-9_-]/g,'-');
                     html = html + '<tr><td style="border: 1px solid black;">' + walkin.company + '</td>' +
                         '<td style="border: 1px solid black;">' + walkin.title + '</td>' +
                         '<td style="border: 1px solid black;">' + walkin.experience + '</td>' +
                         '<td style="border: 1px solid black;">' + walkin.location + '</td>' +
-                        '<td style="border: 1px solid black;"><a href="www.walkinshub.com/walkin/' + walkin._id + '"> Details </a></td></tr>';
+                        '<td style="border: 1px solid black;"><a href="www.walkinshub.com/walkin/' + companyName + '-' + walkin._id + '"> Details </a></td></tr>';
                 }
             })
             html = html + '</tbody></table></body></html>'
@@ -438,14 +439,13 @@ router.get('/notifyfbsubscribers', function(req, res,
                     fbsubscribers.forEach(function(subscriber, i) {
                         setTimeout(function() {
                             if (subscriber.fb_email != '' && subscriber.fb_email != undefined && subscriber.fb_email != null) {
-                                console.log("sending email to " + subscriber.fb_email);
-                                mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Walkins list for today', 'Hello, Please find below list of job walkins that are posted today', html);
+                                mailSender.sendMail('"www.walkinshub.com" <walkinshubindia@gmail.com>', subscriber.fb_email, 'Today Walkin Interviews', 'Here is th list of interviews that are posted on walkinshub.com today', html);
                             }
                         }, (i + 1) * 5000);
                     })
                 }
             })
-            res.json("emails triggered..");
+            res.json("Emails triggered.");
         }
     });
 });
