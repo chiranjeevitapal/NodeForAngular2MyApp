@@ -40,32 +40,6 @@ app.use("/", expressStaticGzip("client"));
 //app.use(express.static(path.join(__dirname, 'client')));
 //URL Rewriting - start
 
-var sitemap = sm.createSitemap({
-    hostname: 'http://example.com',
-    cacheTime: 600000, // 600 sec - cache purge period
-    urls: [{
-            url: '/walkin/',
-            changefreq: 'daily',
-            priority: 0.3
-        },
-        {
-            url: '/tutorials/',
-            changefreq: 'daily',
-            priority: 0.7
-        }
-    ]
-});
-
-app.get('/sitemap.xml', function(req, res) {
-    sitemap.toXML(function(err, xml) {
-        if (err) {
-            return res.status(500).end();
-        }
-        res.header('Content-Type', 'application/xml');
-        res.send(xml);
-    });
-});
-
 app.get('/home', function(request, response, next) {
     //app.use(express.static(path.join(__dirname, 'client')))
     app.use("/", expressStaticGzip("client"));

@@ -14,7 +14,10 @@ var mailSender = require('../utils/mailSender.js');
 var capture = require('../utils/capture.js');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var sm = require('sitemap');
+var walkinUrls = [{
+    url: '/tutorials/'
+}];
 
 /* Get all walkins */
 router.get('/walkinsAll/:offset/:limit/:sortBy/:sortType', function(req, res,
@@ -62,6 +65,42 @@ router.get('/walkinsAll', function(req, res,
     });
 });
 
+
+var sitemap = sm.createSitemap({
+    hostname: 'http://www.walkinshub.com',
+    cacheTime: 600000, // 600 sec - cache purge period
+    urls: this.walkinUrls
+});
+
+router.get('/sitemap.xml', function(req, res) {
+    var xml = '<?xml version="1.0" encoding="UTF-8"?>' +
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ' +
+        'xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" ' +
+        'xmlns:xhtml="http://www.w3.org/1999/xhtml" ' +
+        'xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" ' +
+        'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+
+
+    collection.find({}).toArray(function(err, walkins) {
+        if (err) {
+            res.send(err);
+        } else {
+            //res.json(walkins);
+            walkins.forEach(function(walkin) {
+                let companyName = walkin.company.replace(/[^a-zA-Z0-9_-]/g,'-');
+                xml += '<url><loc>http://www.walkinshub.com/walkin/' + companyName + '-' + walkin._id + '</loc><changefreq>daily</changefreq></url>';
+            });
+            xml += '<url><loc>http://www.walkinshub.com/tutorials/</loc><changefreq>daily</changefreq></url></urlset>'
+            setTimeout(function() {
+                res.header('Content-Type', 'application/xml');
+                res.send(xml);
+            }, 2000);
+        }
+    });
+});
+
 /* Get all jobseekers */
 router.get('/jobseekers', function(req, res,
     next) {
@@ -103,7 +142,7 @@ router.get('/todayVisitors', function(req, res, next) {
 
 /* GET One Walkin with the provided ID */
 router.get('/walkin/:id', function(req, res, next) {
-    var id = req.params.id.substring(req.params.id.lastIndexOf('-')+1);
+    var id = req.params.id.substring(req.params.id.lastIndexOf('-') + 1);
     //var id = req.params.id;
     collection.find({
         _id: ObjectId("" + id)
