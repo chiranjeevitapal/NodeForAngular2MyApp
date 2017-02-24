@@ -12,6 +12,7 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var expressStaticGzip = require("express-static-gzip");
 var compression = require('compression');
+var sm = require('sitemap');
 
 mongoose.connect('mongodb://localhost:27017/jobu');
 var db = mongoose.connection;
@@ -33,12 +34,37 @@ var app = express();
  * app.use(cors(corsOptions))
  */
 
- app.use(compression());
- app.use("/", expressStaticGzip("client"));
+app.use(compression());
+app.use("/", expressStaticGzip("client"));
 
 //app.use(express.static(path.join(__dirname, 'client')));
 //URL Rewriting - start
 
+var sitemap = sm.createSitemap({
+    hostname: 'http://example.com',
+    cacheTime: 600000, // 600 sec - cache purge period
+    urls: [{
+            url: '/walkin/',
+            changefreq: 'daily',
+            priority: 0.3
+        },
+        {
+            url: '/tutorials/',
+            changefreq: 'daily',
+            priority: 0.7
+        }
+    ]
+});
+
+app.get('/sitemap.xml', function(req, res) {
+    sitemap.toXML(function(err, xml) {
+        if (err) {
+            return res.status(500).end();
+        }
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+    });
+});
 
 app.get('/home', function(request, response, next) {
     //app.use(express.static(path.join(__dirname, 'client')))
