@@ -52,7 +52,8 @@ router.get('/walkinsAll', function(req, res,
                 if (!err) {
                     capture.captureDetails(req);
                     res.setHeader('X-Total-Count', count);
-                    res.setHeader('Cache-Control', 'public, max-age=31557600');
+                    //res.setHeader('Cache-Control', 'public, max-age=31557600');
+                    res.setHeader('Cache-Control', 'no-cache');
                     res.json(walkins);
                 }
             })
