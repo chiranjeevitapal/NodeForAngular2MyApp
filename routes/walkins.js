@@ -92,7 +92,8 @@ router.get('/sitemap.xml', function(req, res) {
                 var companyName = walkin.company.replace(/[^a-zA-Z0-9_-]/g,'-');
                 xml += '<url><loc>http://www.walkinshub.com/walkin/' + companyName + '-' + walkin._id + '</loc><changefreq>daily</changefreq></url>';
             });
-            xml += '<url><loc>http://www.walkinshub.com/tutorials/</loc><changefreq>daily</changefreq></url></urlset>'
+            xml += '<url><loc>http://www.walkinshub.com/tutorials/</loc><changefreq>daily</changefreq></url>'+
+            '<url><loc>http://www.walkinshub.com/</loc><changefreq>daily</changefreq></url></urlset>'
             setTimeout(function() {
                 res.header('Content-Type', 'application/xml');
                 res.send(xml);
