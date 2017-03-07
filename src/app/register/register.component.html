@@ -1,0 +1,26 @@
+<form [formGroup]="registrationForm" novalidate (ngSubmit)="register(registrationForm.value, registrationForm.valid)">
+    <div id="legend" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <legend class="">Please register to get daily job alerts</legend>
+    </div>
+    <div class="well alert alert-success">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="control-label" for="email">Email</label>
+                <input type="text" id="email" formControlName="email" class="form-control" placeholder="email id">
+                <small [hidden]="registrationForm.controls.email.valid || (registrationForm.controls.email.pristine && !submitted)" class="text-danger">
+                    Email is required and format should be <i>xyz@gmail.com</i>.
+                </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input type="password" id="password" formControlName="password" class="form-control" placeholder="password">
+                <small [hidden]="registrationForm.controls.password.valid || (registrationForm.controls.password.pristine && !submitted)">
+                  Password is required (minimum 6 characters, maximum 15 characters).
+                </small>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-md btn-success" [disabled]="!registrationForm.valid">Register</button>
+    </div>
+</form>

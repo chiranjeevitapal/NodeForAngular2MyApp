@@ -14,7 +14,6 @@ var mailSender = require('../utils/mailSender.js');
 var capture = require('../utils/capture.js');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var sm = require('sitemap');
 var walkinUrls = [{
     url: '/tutorials/'
 }];
@@ -63,13 +62,6 @@ router.get('/walkinsAll', function(req, res,
 
         }
     });
-});
-
-
-var sitemap = sm.createSitemap({
-    hostname: 'http://www.walkinshub.com',
-    cacheTime: 600000, // 600 sec - cache purge period
-    urls: this.walkinUrls
 });
 
 router.get('/sitemap.xml', function(req, res) {

@@ -1,0 +1,202 @@
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-91328157-1', 'auto');
+    ga('send', 'pageview');
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=1646263562333117";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<div *ngIf="successMessage != ''" class="alert alert-success">
+    {{successMessage}}
+</div>
+<div *ngIf="errorMessage != ''" class="alert alert-danger">
+    {{errorMessage}}
+</div>
+<div class="alert alert-info">
+    Alternately you can send job details to walkinshubindia@gmail.com
+</div>
+
+<form [formGroup]="postJobForm" novalidate (ngSubmit)="submit(postJobForm.value, postJobForm.valid)">
+
+    <div class="row">
+
+        <!-- We'll add our form controls here -->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="company">Company</label>
+                <input type="text" formControlName="company" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.company.valid || (postJobForm.controls.company.pristine && !submitted)">
+        Company is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="companyProfile">Company Profile</label>
+                <input type="text" formControlName="companyProfile" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="website">Company Website</label>
+                <input type="text" placeholder="www.example.com" formControlName="website" class="form-control" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$">
+                <small class="text-danger" [hidden]="postJobForm.controls.website.valid || (postJobForm.controls.website.pristine && !submitted)">
+        Please enter a valid URL.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="title">Title</label>
+                <input type="text" formControlName="title" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.title.valid || (postJobForm.controls.title.pristine && !submitted)">
+        Title is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="position">Position</label>
+                <input type="text" formControlName="position" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.position.valid || (postJobForm.controls.position.pristine && !submitted)">
+        Position is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="location">Location</label>
+                <input type="text" formControlName="location" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.location.valid || (postJobForm.controls.location.pristine && !submitted)">
+        Location is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="eligibility">Qualification</label>
+                <input type="text" formControlName="eligibility" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.eligibility.valid || (postJobForm.controls.eligibility.pristine && !submitted)">
+        Qualification is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="experience">Experience</label>
+                <input type="text" placeholder="0-1 years" formControlName="experience" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.experience.valid || (postJobForm.controls.experience.pristine && !submitted)">
+        Experience is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="jobDescription">Job Description</label>
+                <input type="text" formControlName="jobDescription" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.jobDescription.valid || (postJobForm.controls.jobDescription.pristine && !submitted)">
+        Job Description is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="walkinDate">Walkin Date</label>
+                <input type="text" placeholder="dd-mm-yyyy" formControlName="walkinDate" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.walkinDate.valid || (postJobForm.controls.walkinDate.pristine && !submitted)">
+        Walkin Date is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="walkinTime">Walkin Time</label>
+                <input type="text" placeholder="10AM to 5PM" formControlName="walkinTime" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.walkinTime.valid || (postJobForm.controls.walkinTime.pristine && !submitted)">
+        Walkin Time is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="salary">Salary</label>
+                <input type="text" formControlName="salary" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.salary.valid || (postJobForm.controls.salary.pristine && !submitted)">
+        Salary is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="howToApply">How To Apply</label>
+                <input type="text" formControlName="howToApply" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.howToApply.valid || (postJobForm.controls.howToApply.pristine && !submitted)">
+        How To Apply is required.
+    </small>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="contactDetails">Contact Details</label>
+                <input type="text" formControlName="contactDetails" class="form-control">
+                <small class="text-danger" [hidden]="postJobForm.controls.contactDetails.valid || (postJobForm.controls.contactDetails.pristine && !submitted)">
+        Contact Details is required.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="date">Date</label>
+                <input type="text" formControlName="date" class="form-control">
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="email">Email</label>
+                <input type="text" placeholder="example@gmail.com" formControlName="email" class="form-control" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+                <small class="text-danger" [hidden]="postJobForm.controls.email.valid || (postJobForm.controls.email.pristine && !submitted)">
+        Please enter your email address.
+    </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <button type="submit" class="card-1 btn btn-md btn-success">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

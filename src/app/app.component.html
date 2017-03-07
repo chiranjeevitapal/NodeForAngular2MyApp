@@ -1,0 +1,117 @@
+<script async type="javascript">
+    (function(i, s, o, g, r, a, m) { i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function() { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a,
+    m) })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'); ga('create', 'UA-91328157-1', 'auto'); ga('send', 'pageview'); (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=1646263562333117"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));
+</script>
+<nav class="navbar navbar-inverse navbar-fixed-top card-2">
+    <div class="container-fluid">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+        <div class="navbar-header">
+            <a class="navbar-brand hvr-underline-from-center" href="/" title="Home"><i class="fa fa-home" aria-hidden="true"></i> Walkins Hub</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navigationbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/tutorials" class="hvr-underline-from-center" title="Tutorials"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Tutorials</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i> Employer <span class="caret"></span></a>
+                    <ul id="employer-zone" class="dropdown-menu">
+                        <!--li>
+							<a href="/jobseekers" title="Subscribe"><b class="text-primary"><i class="fa fa-users" aria-hidden="true"></i> Job Seekers</b></a>
+						</li-->
+                        <li>
+                            <a href="/postJob" title="Post a Job"><span class="text-primary"><i class="fa fa-envelope" aria-hidden="true"></i> Post a Job</span></a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="notLoggedIn" style="display:none">
+                    <a href="#" class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i> Login/Signup <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="login-dp">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <button type="submit" (click)="checkLoginState()" class="card-1 btn btn-primary btn-sm"><i class="fa fa-facebook-square"></i> Sign in</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <!--li class="dropdown" id="loggedIn" style="display:none">
+                    <a href="#" class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown"><img id="userImg" src="" class="profile-image img-circle" />
+                        <font id="username"></font> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/profile" title="Profile"><span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i> Profile</span></a>
+                        </li>
+                        <li class="login-dp top-buffer">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <button type="submit" (click)="logOut()" class="card-1 btn btn-primary btn-xs"><i class="fa fa-facebook-square"></i> Logout</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li-->
+
+                <li class="dropdown" id="loggedIn" style="display:none">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img id="userImg" src="" class="profile-image img-circle" />
+                        <strong id="username"></strong>
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="navbar-login">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <p class="text-center">
+                                            <span class="glyphicon glyphicon-user icon-size"></span>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <p class="text-left"><strong id="username"></strong></p>
+                                        <!--p class="text-left small">crazytodevelop@@gmail.com</p-->
+                                        <p class="text-left">
+                                            <a href="/profile" title="Profile" class="btn btn-info btn-block btn-sm card-1">Profile</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider navbar-login-session-bg"></li>
+                        <!--li><a href="#">Account Settings <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
+                        <li class="divider"></li-->
+                        <li class="login-dp"><button (click)="logOut()" class="btn btn-primary btn-block btn-sm card-1"><i class="fa fa-facebook-square"></i> Sign Out</button></li>
+                    </ul>
+                </li>
+            </ul>
+
+
+
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+<div class="container top-buffer">
+    <router-outlet></router-outlet>
+</div>

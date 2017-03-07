@@ -1,0 +1,154 @@
+<form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+
+    <div class="row well">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+
+                <label class="control-label" for="websiteName">Walkin Name</label>
+                <!--select id="websiteName" formControlName="websiteName" class="form-control">
+                  <option *ngFor="let website of websites" [value]="website">{{website}}</option>
+                </select-->
+
+                <select id="websiteName" formControlName="websiteName" class="form-control">
+                  <option *ngFor="let website of websites" [value]="website">{{website}}</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="websiteLink">Website Link</label>
+                <input type="text" formControlName="websiteLink" class="form-control">
+            </div>
+        </div>
+        <button type="button" class="btn btn-md btn-danger" (click)="scrapeWalkin(myForm.value)">Scrape Walkins</button>
+        <button type="button" class="btn btn-md btn-primary" (click)="scrapeAndSave(myForm.value)">Scrape All</button>
+        <button type="button" class="btn btn-md btn-info" (click)="notify()">Notify</button>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label class="control-label" for="message">Message</label>
+                <input type="text" formControlName="message" class="form-control" #message>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-md btn-info" (click)="sendMessage(message.value)">Message</button>
+        </div>
+    </div>
+    <br/><br/>
+
+    <!-- We'll add our form controls here -->
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="title">Title</label>
+            <input type="text" formControlName="title" class="form-control">
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="date">Date</label>
+            <input type="text" formControlName="date" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="position">Position</label>
+            <input type="text" formControlName="position" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="location">Location</label>
+            <input type="text" formControlName="location" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="company">Company</label>
+            <input type="text" formControlName="company" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="eligibility">Eligibility</label>
+            <input type="text" formControlName="eligibility" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="experience">Experience</label>
+            <input type="text" formControlName="experience" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="jobDescription">Job Description</label>
+            <input type="text" formControlName="jobDescription" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="salary">Salary</label>
+            <input type="text" formControlName="salary" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="lastDate">LastDate</label>
+            <input type="text" formControlName="lastDate" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="walkinDate">Walkin Date</label>
+            <input type="text" formControlName="walkinDate" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="walkinTime">Walkin Time</label>
+            <input type="text" formControlName="walkinTime" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="companyProfile">Company Profile</label>
+            <input type="text" formControlName="companyProfile" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="howToApply">How To Apply</label>
+            <input type="text" formControlName="howToApply" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="website">Company Website</label>
+            <input type="text" formControlName="website" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="contactDetails">Contact Details</label>
+            <input type="text" formControlName="contactDetails" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="jobRequirements">Job Requirements</label>
+            <input type="text" formControlName="jobRequirements" class="form-control">
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label class="control-label" for="candidateProfile">Candidate Profile</label>
+            <input type="text" formControlName="candidateProfile" class="form-control">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-md btn-success">Upload</button>
+
+</form>

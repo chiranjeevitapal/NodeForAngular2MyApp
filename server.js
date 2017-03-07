@@ -12,12 +12,10 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var expressStaticGzip = require("express-static-gzip");
 var compression = require('compression');
-var sm = require('sitemap');
 
 mongoose.connect('mongodb://localhost:27017/jobu');
 var db = mongoose.connection;
 
-var employee = require('./routes/employee');
 var uploader = require('./routes/uploader');
 var walkins = require('./routes/walkins');
 var authentication = require('./routes/authentication');
@@ -97,7 +95,7 @@ app.get('/**', function(request, response, next) {
 
 
 
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin',
         '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, PUT');
@@ -105,7 +103,7 @@ app.use(function(req, res, next) {
         'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
-});
+});*/
 
 // BodyParser Middleware
 app.use(bodyParser.json());
@@ -152,7 +150,6 @@ app
  * next(); });
  */
 
-app.use('/api/', employee);
 app.use('/api/', uploader);
 app.use('/api/', walkins);
 app.use('/api/', authentication);
