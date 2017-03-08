@@ -38,6 +38,14 @@ app.use("/", expressStaticGzip("client"));
 //app.use(express.static(path.join(__dirname, 'client')));
 //URL Rewriting - start
 
+app.get('/walkinshub', function(request, response, next) {
+    //app.use(express.static(path.join(__dirname, 'client')))
+    //app.use("/", expressStaticGzip("client"));
+    //request.url = '/#/walkinshub';
+    //next();
+    response.sendFile(path.join(__dirname, 'client', 'walkinshub.html'));
+});
+
 app.get('/home', function(request, response, next) {
     //app.use(express.static(path.join(__dirname, 'client')))
     app.use("/", expressStaticGzip("client"));
